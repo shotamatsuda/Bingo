@@ -1,0 +1,23 @@
+{
+  "name": "avr",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/avr/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "make",
+        "cwd": "apps/avr"
+      }
+    },
+    "write": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "avrdude -c usbtiny -p t2313 -U flash:w:main.hex",
+        "cwd": "apps/avr"
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "root": true,
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.mts", "*.js", "*.jsx", "*.mjs"],
+      "rules": {
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx", "*.mts"],
+      "parserOptions": {
+        "project": ["./tsconfig.*?.json"]
+      },
+      "extends": ["plugin:@nx/typescript", "love", "prettier"],
+      "rules": {
+        // It's not harmful. Empty interfaces have purposes.
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-empty-function": "off",
+
+        // It's not so harmful to coarse values to strings, especially inside
+        // template strings from which we often construct messages.
+        "@typescript-eslint/restrict-template-expressions": "off",
+
+        // Triple slash reference has a different purpose.
+        "@typescript-eslint/triple-slash-reference": "off",
+
+        // Too many false positives.
+        "@typescript-eslint/no-unsafe-argument": "off",
+
+        // Too many false positives. `T extends any` is totally type-safe.
+        "@typescript-eslint/no-explicit-any": "off",
+
+        // {} is semantically different from `object` and `Record`.
+        "@typescript-eslint/ban-types": "off"
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx", "*.mjs"],
+      "extends": ["plugin:@nx/javascript", "prettier"],
+      "rules": {}
+    },
+    {
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
+      "env": {
+        "jest": true
+      },
+      "rules": {}
+    }
+  ]
+}
