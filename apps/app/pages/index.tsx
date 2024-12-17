@@ -8,6 +8,7 @@ import { History } from '../components/History'
 import { Probability } from '../components/Probability'
 import { Screen } from '../components/Screen'
 import { type PageProps } from '../src/types'
+import { Setup } from '../components/Setup'
 
 const Root = styled('div')`
   display: flex;
@@ -62,6 +63,7 @@ const Index: NextPage = () => (
         </Columns>
       </Root>
     </Screen>
+    <Setup />
   </>
 )
 

@@ -32,6 +32,11 @@ const options: ThemeOptions = {
         }),
         input: ({ theme }) => ({
           paddingTop: theme.spacing(1)
+        }),
+        sizeSmall: ({ theme }) => ({
+          input: {
+            paddingTop: theme.spacing(0.5)
+          }
         })
       }
     }
