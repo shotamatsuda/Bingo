@@ -14,7 +14,7 @@ import { createCumulativeValues, createValues } from '@/bingo'
 
 import { isNotNullish } from '../helpers/assertions'
 import { useMachineContext } from '../helpers/useMachineContext'
-import { machineAtomAtom } from '../src/states'
+import { boardCountAtom, machineAtomAtom } from '../src/states'
 import { useAtomValue } from 'jotai'
 
 interface Insets {
@@ -399,7 +399,6 @@ const Graph: FC<{
 }
 
 export interface ProbabilityProps {
-  boardCount?: number
   sessionLength?: number
 }
 
@@ -425,16 +424,21 @@ export const Probability: FC<ProbabilityProps> = props => {
       break
   }
 
+  const boardCount = useAtomValue(boardCountAtom)
   const [ref, { width, height }] = useMeasure<HTMLDivElement>()
-
   return (
     <Stack minWidth={0} minHeight={0}>
       <Title>
-        {title} call{' '}
-        {props.boardCount != null ? `for ${props.boardCount} boards` : ''}
+        {title} call for {boardCount} boards
       </Title>
       <Root ref={ref}>
-        <Graph {...props} width={width} height={height} callCount={callCount} />
+        <Graph
+          {...props}
+          width={width}
+          height={height}
+          callCount={callCount}
+          boardCount={boardCount}
+        />
       </Root>
     </Stack>
   )

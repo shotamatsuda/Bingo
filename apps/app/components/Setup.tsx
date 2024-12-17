@@ -12,11 +12,10 @@ import {
   styled,
   TextField
 } from '@mui/material'
-import { Stack } from '@mui/system'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import { without } from 'lodash'
-import { useCallback, useEffect, type FC } from 'react'
-import { serialPortAtom } from '../src/states'
+import { useCallback, useEffect, type ChangeEvent, type FC } from 'react'
+import { boardCountAtom, openSetupAtom, serialPortAtom } from '../src/states'
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   [`.${dialogClasses.paper}`]: {
@@ -105,17 +104,34 @@ export const Setup: FC = () => {
     })
   }, [setPorts])
 
+  const [boardCount, setBoardCount] = useAtom(boardCountAtom)
+  const handleBoardCountChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = +event.target.value
+      if (!isNaN(value) && value > 0) {
+        setBoardCount(value)
+      }
+    },
+    [setBoardCount]
+  )
+
+  const [open, setOpen] = useAtom(openSetupAtom)
+  const handleClose = useCallback(() => {
+    setOpen(false)
+  }, [setOpen])
+
   return (
-    <StyledDialog open>
+    <StyledDialog open={open} onClose={handleClose}>
       <DialogTitle>Settings</DialogTitle>
       <DialogContent>
         <List disablePadding sx={{ width: 400 }}>
           <ListItem
             secondaryAction={
               <TextField
-                type='text'
+                type='number'
                 size='small'
-                value='40'
+                value={boardCount}
+                onChange={handleBoardCountChange}
                 sx={{ width: 100 }}
               />
             }

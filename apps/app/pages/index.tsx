@@ -53,7 +53,7 @@ const Index: NextPage = () => (
             <Events />
           </Column>
           <Rows>
-            <Probability boardCount={40} />
+            <Probability />
             <Call />
             <Flips />
           </Rows>
