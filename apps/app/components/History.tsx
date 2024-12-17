@@ -2,7 +2,8 @@ import { css, styled } from '@mui/material'
 import { useMemo, type FC } from 'react'
 
 import { useMachineContext } from '../helpers/useMachineContext'
-import { machineAtom } from '../src/states'
+import { machineAtomAtom } from '../src/states'
+import { useAtomValue } from 'jotai'
 
 const ItemRoot = styled('div')<{ selected: boolean }>`
   display: flex;
@@ -19,6 +20,7 @@ const ItemRoot = styled('div')<{ selected: boolean }>`
 `
 
 export const Item: FC<{ value: number }> = ({ value }) => {
+  const machineAtom = useAtomValue(machineAtomAtom)
   const callHistory = useMachineContext(
     machineAtom,
     ({ callHistory }) => callHistory

@@ -6,14 +6,14 @@ import {
   useAnimationFrame,
   useMotionValue
 } from 'framer-motion'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useMemo, type FC, type ReactNode } from 'react'
 import { useMeasure } from 'react-use'
 
 import { type Interval } from '@/bingo'
 
 import { type PulseEvent } from '../src/machine'
-import { machineAtom } from '../src/states'
+import { machineAtomAtom } from '../src/states'
 
 const Root = styled('div')`
   overflow: hidden;
@@ -179,7 +179,7 @@ const Flash: FC<{
 }
 
 function useEvents({ duration }: { duration: number }): PulseEvent[] {
-  const [snapshot] = useAtom(machineAtom)
+  const [snapshot] = useAtom(useAtomValue(machineAtomAtom))
   const eventHistory = snapshot.context.eventHistory
   return useMemo(() => {
     const past = Date.now() - duration
@@ -195,7 +195,7 @@ function useIntervals({
 }: {
   duration: number
 }): Array<Interval<PulseEvent>> {
-  const [snapshot] = useAtom(machineAtom)
+  const [snapshot] = useAtom(useAtomValue(machineAtomAtom))
   const intervalHistory = snapshot.context.intervalHistory
   return useMemo(() => {
     const past = Date.now() - duration

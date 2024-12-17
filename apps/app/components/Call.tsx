@@ -8,7 +8,7 @@ import { Node } from '@/fdr'
 
 import { useMachineContext } from '../helpers/useMachineContext'
 import { CANCEL, CONTINUE } from '../src/machine'
-import { machineAtom } from '../src/states'
+import { machineAtomAtom } from '../src/states'
 import { ActionButton } from './ActionButton'
 
 const Root = styled('div')`
@@ -27,8 +27,9 @@ const Text = styled('div')<{ running: boolean }>`
 `
 
 const Number: FC = () => {
-  const snapshot = useAtomValue(machineAtom)
+  const snapshot = useAtomValue(useAtomValue(machineAtomAtom))
   const running = snapshot.matches({ connected: 'running' })
+  const machineAtom = useAtomValue(machineAtomAtom)
   const value = useMachineContext(machineAtom, ({ call }) => call?.value)
   const numbersLeft = useMachineContext(
     machineAtom,
@@ -75,7 +76,7 @@ const Number: FC = () => {
 }
 
 export const Call: FC = () => {
-  const [snapshot, send] = useAtom(machineAtom)
+  const [snapshot, send] = useAtom(useAtomValue(machineAtomAtom))
 
   const handleContinue = useCallback(() => {
     send({ type: CONTINUE })

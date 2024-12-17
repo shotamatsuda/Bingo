@@ -14,7 +14,8 @@ import { createCumulativeValues, createValues } from '@/bingo'
 
 import { isNotNullish } from '../helpers/assertions'
 import { useMachineContext } from '../helpers/useMachineContext'
-import { machineAtom } from '../src/states'
+import { machineAtomAtom } from '../src/states'
+import { useAtomValue } from 'jotai'
 
 interface Insets {
   top: number
@@ -403,6 +404,7 @@ export interface ProbabilityProps {
 }
 
 export const Probability: FC<ProbabilityProps> = props => {
+  const machineAtom = useAtomValue(machineAtomAtom)
   const callCount = useMachineContext(
     machineAtom,
     ({ callHistory }) => callHistory.length + 1

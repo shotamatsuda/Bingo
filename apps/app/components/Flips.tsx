@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai'
 import { type FC } from 'react'
 
 import { useMachineContext } from '../helpers/useMachineContext'
-import { machineAtom } from '../src/states'
+import { machineAtomAtom } from '../src/states'
 
 const Index = styled('div')`
   font-size: 24px;
@@ -45,6 +45,7 @@ const Flip: FC<{
 )
 
 export const Flips: FC = () => {
+  const machineAtom = useAtomValue(machineAtomAtom)
   const snapshot = useAtomValue(machineAtom)
   const expectedCost = useMachineContext(
     machineAtom,

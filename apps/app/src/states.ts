@@ -2,13 +2,20 @@ import { atom } from 'jotai'
 import { atomWithMachine } from 'jotai-xstate'
 
 import { createMachine } from './machine'
-import { createInternalReceiver } from './receivers'
+import { createInternalReceiver, createSerialReceiver } from './receivers'
 
-export const receiverAtom = atom(createInternalReceiver())
+export const serialPortAtom = atom<SerialPort | null>(null)
 
-export const machineAtom = atomWithMachine(get =>
-  createMachine({
-    receiver: get(receiverAtom),
-    autoContinue: true
-  })
-)
+export const machineAtomAtom = atom(get => {
+  const serialPort = get(serialPortAtom)
+  const receiver =
+    serialPort != null
+      ? createSerialReceiver(serialPort)
+      : createInternalReceiver()
+  return atomWithMachine(() =>
+    createMachine({
+      receiver,
+      autoContinue: true
+    })
+  )
+})

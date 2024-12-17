@@ -30,11 +30,11 @@ async function* readValues(port: SerialPort): AsyncIterable<Uint8Array> {
   }
 }
 
-export function createSerialReceiver(): CallbackActorLogic<AnyEventObject> {
+export function createSerialReceiver(
+  port: SerialPort
+): CallbackActorLogic<AnyEventObject> {
   return fromCallback(({ sendBack }) => {
     ;(async () => {
-      const ports = await navigator.serial.getPorts()
-      const port = ports[0]
       await port.open({ baudRate: 9600 })
 
       sendBack({ type: CONNECT })
