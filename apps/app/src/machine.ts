@@ -36,6 +36,7 @@ export interface MachineParams
   extends Partial<StateOptions>,
     Partial<ReducerOptions> {
   receiver: CallbackActorLogic<AnyEventObject>
+  restoreLastSession?: boolean
   autoContinue?: boolean
 }
 
@@ -45,8 +46,21 @@ export function createMachine({
   sessionLength = 75,
   minInterval = 20,
   eventHistorySize = 100,
+  restoreLastSession = false,
   autoContinue = false
 }: MachineParams) {
+  let callHistory: Context['callHistory'] | undefined
+  if (restoreLastSession) {
+    try {
+      const data = localStorage.getItem('com.shotamatsuda.bingo.callHistory')
+      if (data != null) {
+        callHistory = JSON.parse(data)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return setup({
     types: {} as unknown as {
       context: Context
@@ -76,7 +90,13 @@ export function createMachine({
               eventHistorySize
             })
           : context
-      )
+      ),
+      saveCallHistory: ({ context }) => {
+        localStorage.setItem(
+          'com.shotamatsuda.bingo.callHistory',
+          JSON.stringify(context.callHistory)
+        )
+      }
     },
     guards: {
       shouldStop: ({ context }) => context.call != null,
@@ -87,7 +107,7 @@ export function createMachine({
     id: 'data',
     initial: 'disconnected',
     context: {
-      ...initState<PulseEvent>({ sessionLength }),
+      ...initState<PulseEvent>({ sessionLength, callHistory }),
       autoContinue
     },
     invoke: {
@@ -117,6 +137,7 @@ export function createMachine({
             }
           },
           stopped: {
+            entry: 'saveCallHistory',
             on: {
               [PULSE]: {
                 actions: 'pushEvent'

@@ -32,10 +32,12 @@ export interface State<Event extends EventConstraint> {
 
 export interface StateOptions {
   sessionLength: number
+  callHistory?: readonly Call[]
 }
 
 export function initState<Event extends EventConstraint>({
-  sessionLength
+  sessionLength,
+  callHistory
 }: StateOptions): State<Event> {
   return {
     expectedCost: expectedCost(sessionLength),
@@ -47,7 +49,7 @@ export function initState<Event extends EventConstraint>({
     intervalHistory: [],
     interval: null,
     flips: [],
-    callHistory: [],
+    callHistory: callHistory != null ? [...callHistory] : [],
     call: null
   }
 }

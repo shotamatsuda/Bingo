@@ -2,13 +2,16 @@
 
 import {
   Button,
+  Checkbox,
   Dialog,
   dialogClasses,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   List,
   ListItem,
   ListItemText,
+  ListSubheader,
   styled,
   TextField,
   Typography
@@ -19,7 +22,12 @@ import { without } from 'lodash'
 import { useCallback, useEffect, type ChangeEvent, type FC } from 'react'
 
 import { createInternalReceiver, createSerialReceiver } from '../src/receivers'
-import { boardCountAtom, openSettingsAtom, receiverAtom } from '../src/states'
+import {
+  boardCountAtom,
+  openSettingsAtom,
+  receiverAtom,
+  restoreLastSessionAtom
+} from '../src/states'
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   [`.${dialogClasses.paper}`]: {
@@ -53,10 +61,10 @@ const SerialPortItem: FC<{
     <ListItem
       secondaryAction={
         <Stack direction='row' spacing={1}>
-          <Button variant='outlined' size='small' onClick={handleRemove}>
+          <Button variant='outlined' onClick={handleRemove}>
             Remove
           </Button>
-          <Button variant='contained' size='small' onClick={handleUse}>
+          <Button variant='contained' onClick={handleUse}>
             Use
           </Button>
         </Stack>
@@ -64,10 +72,8 @@ const SerialPortItem: FC<{
     >
       <ListItemText>
         <Stack direction='row' spacing={1}>
-          <Typography display='inline' fontSize='inherit'>
-            Serial port
-          </Typography>
-          <Typography display='inline' fontSize='inherit' color='textSecondary'>
+          <span>Serial port</span>
+          <Typography display='inline' color='textSecondary'>
             {port.getInfo().usbVendorId} - {port.getInfo().usbProductId}
           </Typography>
         </Stack>
@@ -89,7 +95,7 @@ const InternalItem: FC<{
     <ListItem
       secondaryAction={
         <Stack direction='row' spacing={1}>
-          <Button variant='contained' size='small' onClick={handleUse}>
+          <Button variant='contained' onClick={handleUse}>
             Use
           </Button>
         </Stack>
@@ -97,10 +103,8 @@ const InternalItem: FC<{
     >
       <ListItemText>
         <Stack direction='row' spacing={1}>
-          <Typography display='inline' fontSize='inherit'>
-            Internal
-          </Typography>
-          <Typography display='inline' fontSize='inherit' color='textSecondary'>
+          <span>Internal</span>
+          <Typography display='inline' color='textSecondary'>
             For demo
           </Typography>
         </Stack>
@@ -164,6 +168,16 @@ export const Settings: FC = () => {
     [setBoardCount]
   )
 
+  const [restoreLastSession, setRestoreLastSession] = useAtom(
+    restoreLastSessionAtom
+  )
+  const handleRestoreLastSession = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setRestoreLastSession(event.target.checked)
+    },
+    [setRestoreLastSession]
+  )
+
   const [open, setOpen] = useAtom(openSettingsAtom)
   const handleClose = useCallback(() => {
     setOpen(false)
@@ -187,10 +201,20 @@ export const Settings: FC = () => {
           >
             <ListItemText>Number of boards</ListItemText>
           </ListItem>
-          <ListItem>
-            <ListItemText>Receiver</ListItemText>
+          <ListSubheader sx={{ background: 'none' }}>Session</ListSubheader>
+          <ListItem sx={{ paddingTop: 0 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={restoreLastSession}
+                  onChange={handleRestoreLastSession}
+                />
+              }
+              label='Restore last session'
+            />
           </ListItem>
-          <List dense disablePadding>
+          <ListSubheader sx={{ background: 'none' }}>Receiver</ListSubheader>
+          <List disablePadding>
             <InternalItem onComplete={handleClose} />
             {ports.map((port, index) => (
               <SerialPortItem
