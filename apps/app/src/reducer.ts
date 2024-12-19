@@ -37,13 +37,15 @@ export interface StateOptions {
 
 export function initState<Event extends EventConstraint>({
   sessionLength,
-  callHistory
+  callHistory: callHistoryProp
 }: StateOptions): State<Event> {
+  const callHistory = callHistoryProp != null ? [...callHistoryProp] : []
+  const numbersLeft = shuffle(
+    [...Array(sessionLength)].map((_, index) => index + 1)
+  ).filter(call => !callHistory.some(({ value }) => value === call))
   return {
-    expectedCost: expectedCost(sessionLength),
-    numbersLeft: shuffle(
-      [...Array(sessionLength)].map((_, index) => index + 1)
-    ),
+    expectedCost: expectedCost(numbersLeft.length),
+    numbersLeft,
     eventHistory: [],
     event: null,
     intervalHistory: [],
