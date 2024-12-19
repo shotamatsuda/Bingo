@@ -28,11 +28,13 @@ const serialPortsAtom = atom<SerialPort[]>([])
 
 const Item: FC<{
   port: SerialPort
-}> = ({ port }) => {
+  onComplete?: () => void
+}> = ({ port, onComplete }) => {
   const setSerialPort = useSetAtom(serialPortAtom)
   const handleUse = useCallback(() => {
     setSerialPort(port)
-  }, [port, setSerialPort])
+    onComplete?.()
+  }, [port, onComplete, setSerialPort])
 
   const setSerialPorts = useSetAtom(serialPortsAtom)
   const handleRemove = useCallback(() => {
@@ -144,7 +146,7 @@ export const Setup: FC = () => {
           </ListItem>
           <List dense disablePadding>
             {ports.map((port, index) => (
-              <Item key={index} port={port} />
+              <Item key={index} port={port} onComplete={handleClose} />
             ))}
           </List>
           <ListItem>

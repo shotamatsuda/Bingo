@@ -103,3 +103,7 @@ export function createInternalReceiver({
     }
   })
 }
+
+export function createNullReceiver(): CallbackActorLogic<AnyEventObject> {
+  return fromCallback(() => {})
+}
