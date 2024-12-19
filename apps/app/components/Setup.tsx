@@ -10,13 +10,16 @@ import {
   ListItem,
   ListItemText,
   styled,
-  TextField
+  TextField,
+  Typography
 } from '@mui/material'
+import { Stack } from '@mui/system'
 import { atom, useAtom, useSetAtom } from 'jotai'
 import { without } from 'lodash'
 import { useCallback, useEffect, type ChangeEvent, type FC } from 'react'
 
-import { boardCountAtom, openSetupAtom, serialPortAtom } from '../src/states'
+import { createInternalReceiver, createSerialReceiver } from '../src/receivers'
+import { boardCountAtom, openSetupAtom, receiverAtom } from '../src/states'
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   [`.${dialogClasses.paper}`]: {
@@ -26,15 +29,15 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 
 const serialPortsAtom = atom<SerialPort[]>([])
 
-const Item: FC<{
+const SerialPortItem: FC<{
   port: SerialPort
   onComplete?: () => void
 }> = ({ port, onComplete }) => {
-  const setSerialPort = useSetAtom(serialPortAtom)
+  const setReceiver = useSetAtom(receiverAtom)
   const handleUse = useCallback(() => {
-    setSerialPort(port)
+    setReceiver(createSerialReceiver(port))
     onComplete?.()
-  }, [port, onComplete, setSerialPort])
+  }, [port, onComplete, setReceiver])
 
   const setSerialPorts = useSetAtom(serialPortsAtom)
   const handleRemove = useCallback(() => {
@@ -49,15 +52,58 @@ const Item: FC<{
   return (
     <ListItem
       secondaryAction={
-        <>
-          <Button onClick={handleUse}>Use</Button>
-          <Button onClick={handleRemove}>Remove</Button>
-        </>
+        <Stack direction='row' spacing={1}>
+          <Button variant='outlined' size='small' onClick={handleRemove}>
+            Remove
+          </Button>
+          <Button variant='contained' size='small' onClick={handleUse}>
+            Use
+          </Button>
+        </Stack>
       }
     >
       <ListItemText>
-        Vendor: {port.getInfo().usbVendorId}, Product:{' '}
-        {port.getInfo().usbProductId}
+        <Stack direction='row' spacing={1}>
+          <Typography display='inline' fontSize='inherit'>
+            Serial
+          </Typography>
+          <Typography display='inline' fontSize='inherit' color='textSecondary'>
+            {port.getInfo().usbVendorId} - {port.getInfo().usbProductId}
+          </Typography>
+        </Stack>
+      </ListItemText>
+    </ListItem>
+  )
+}
+
+const InternalItem: FC<{
+  onComplete?: () => void
+}> = ({ onComplete }) => {
+  const setReceiver = useSetAtom(receiverAtom)
+  const handleUse = useCallback(() => {
+    setReceiver(createInternalReceiver())
+    onComplete?.()
+  }, [onComplete, setReceiver])
+
+  return (
+    <ListItem
+      secondaryAction={
+        <Stack direction='row' spacing={1}>
+          <Button variant='contained' size='small' onClick={handleUse}>
+            Use
+          </Button>
+        </Stack>
+      }
+    >
+      <ListItemText>
+        <Stack direction='row' spacing={1}>
+          <Typography display='inline' fontSize='inherit'>
+            Internal
+          </Typography>
+          <Typography display='inline' fontSize='inherit' color='textSecondary'>
+            For demo
+          </Typography>
+        </Stack>
       </ListItemText>
     </ListItem>
   )
@@ -142,11 +188,16 @@ export const Setup: FC = () => {
             <ListItemText>Number of boards</ListItemText>
           </ListItem>
           <ListItem>
-            <ListItemText>Serial port</ListItemText>
+            <ListItemText>Receiver</ListItemText>
           </ListItem>
           <List dense disablePadding>
+            <InternalItem onComplete={handleClose} />
             {ports.map((port, index) => (
-              <Item key={index} port={port} onComplete={handleClose} />
+              <SerialPortItem
+                key={index}
+                port={port}
+                onComplete={handleClose}
+              />
             ))}
           </List>
           <ListItem>

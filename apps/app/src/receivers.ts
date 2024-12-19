@@ -10,6 +10,8 @@ import { readEvents } from '@/events'
 
 import { CONNECT, DISCONNECT, PULSE } from './machine'
 
+export type Receiver = CallbackActorLogic<AnyEventObject>
+
 async function* readValues(port: SerialPort): AsyncIterable<Uint8Array> {
   while (port.readable != null) {
     const reader = port.readable.getReader()
@@ -30,9 +32,7 @@ async function* readValues(port: SerialPort): AsyncIterable<Uint8Array> {
   }
 }
 
-export function createSerialReceiver(
-  port: SerialPort
-): CallbackActorLogic<AnyEventObject> {
+export function createSerialReceiver(port: SerialPort): Receiver {
   return fromCallback(({ sendBack }) => {
     ;(async () => {
       await port.open({ baudRate: 9600 })
@@ -62,7 +62,7 @@ export interface InternalReceiverParams {
 
 export function createInternalReceiver({
   countPerMinute = 100
-}: InternalReceiverParams = {}): CallbackActorLogic<AnyEventObject> {
+}: InternalReceiverParams = {}): Receiver {
   return fromCallback(({ sendBack }) => {
     sendBack({ type: CONNECT })
 
@@ -104,6 +104,6 @@ export function createInternalReceiver({
   })
 }
 
-export function createNullReceiver(): CallbackActorLogic<AnyEventObject> {
+export function createNullReceiver(): Receiver {
   return fromCallback(() => {})
 }
