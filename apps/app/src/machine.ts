@@ -14,7 +14,7 @@ import {
   type ReducerOptions,
   type State,
   type StateOptions
-} from '@/bingo'
+} from './reducer'
 
 export const CONNECT = 'CONNECT'
 export const DISCONNECT = 'DISCONNECT'

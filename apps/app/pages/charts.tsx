@@ -2,10 +2,10 @@ import { alpha, Container, Stack, styled } from '@mui/material'
 import { range } from 'lodash'
 import { type GetStaticProps, type NextPage } from 'next'
 
-import { createCumulativeValues, createValues } from '@/bingo'
 import { expectedCost } from '@/fdr'
 
 import { Chart, chartColors } from '../components/Chart'
+import { createCumulativeValues, createValues } from '../src/probability'
 import { type PageProps } from '../src/types'
 
 const Root = styled('div')`

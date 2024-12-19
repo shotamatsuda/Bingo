@@ -16,7 +16,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/bingo": ["libs/bingo/src/index.ts"],
       "@/events": ["libs/events/src/index.ts"],
       "@/fdr": ["libs/fdr/src/index.ts"]
     }

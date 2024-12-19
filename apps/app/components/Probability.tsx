@@ -6,16 +6,15 @@ import {
   scaleLinear,
   type ScaleLinear
 } from 'd3'
+import { useAtomValue } from 'jotai'
 import { max } from 'lodash'
 import { Fragment, useMemo, type FC, type SVGProps } from 'react'
 import { useMeasure } from 'react-use'
 
-import { createCumulativeValues, createValues } from '@/bingo'
-
 import { isNotNullish } from '../helpers/assertions'
 import { useMachineContext } from '../helpers/useMachineContext'
+import { createCumulativeValues, createValues } from '../src/probability'
 import { boardCountAtom, machineAtomAtom } from '../src/states'
-import { useAtomValue } from 'jotai'
 
 interface Insets {
   top: number

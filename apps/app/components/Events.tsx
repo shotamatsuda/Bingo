@@ -10,10 +10,9 @@ import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useMemo, type FC, type ReactNode } from 'react'
 import { useMeasure } from 'react-use'
 
-import { type Interval } from '@/bingo'
-
 import { type PulseEvent } from '../src/machine'
 import { machineAtomAtom } from '../src/states'
+import { type Interval } from '../src/reducer'
 
 const Root = styled('div')`
   overflow: hidden;
