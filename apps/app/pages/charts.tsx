@@ -2,9 +2,8 @@ import { alpha, Container, Stack, styled } from '@mui/material'
 import { range } from 'lodash'
 import { type GetStaticProps, type NextPage } from 'next'
 
-import { expectedCost } from '@/fdr'
-
 import { Chart, chartColors } from '../components/Chart'
+import { expectedCost } from '../src/fdr'
 import { createCumulativeValues, createValues } from '../src/probability'
 import { type PageProps } from '../src/types'
 

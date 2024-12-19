@@ -4,9 +4,8 @@ import { useAtom, useAtomValue } from 'jotai'
 import { shuffle } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, type FC } from 'react'
 
-import { Node } from '@/fdr'
-
 import { useMachineContext } from '../helpers/useMachineContext'
+import { Node } from '../src/fdr'
 import { CANCEL, CONTINUE } from '../src/machine'
 import { machineAtomAtom } from '../src/states'
 import { ActionButton } from './ActionButton'

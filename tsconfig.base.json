@@ -16,8 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/events": ["libs/events/src/index.ts"],
-      "@/fdr": ["libs/fdr/src/index.ts"]
+      "@/events": ["libs/events/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

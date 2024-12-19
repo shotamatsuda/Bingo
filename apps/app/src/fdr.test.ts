@@ -1,4 +1,4 @@
-import { Node } from '.'
+import { Node } from './fdr'
 
 describe('Node', () => {
   test('root', () => {

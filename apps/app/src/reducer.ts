@@ -1,6 +1,6 @@
 import { shuffle } from 'lodash'
 
-import { expectedCost, Node } from '@/fdr'
+import { expectedCost, Node } from './fdr'
 
 export interface EventConstraint {
   time: number
