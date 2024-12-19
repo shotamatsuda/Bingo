@@ -117,6 +117,11 @@ export function createMachine({
             }
           },
           stopped: {
+            on: {
+              [PULSE]: {
+                actions: 'pushEvent'
+              }
+            },
             after: {
               0: {
                 target: 'idle',
