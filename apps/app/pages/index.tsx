@@ -7,8 +7,8 @@ import { Flips } from '../components/Flips'
 import { History } from '../components/History'
 import { Probability } from '../components/Probability'
 import { Screen } from '../components/Screen'
-import { type PageProps } from '../src/types'
 import { Setup } from '../components/Setup'
+import { type PageProps } from '../src/types'
 
 const Root = styled('div')`
   display: flex;

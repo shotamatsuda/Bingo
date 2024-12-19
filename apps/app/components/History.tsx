@@ -1,9 +1,9 @@
 import { css, styled } from '@mui/material'
+import { useAtomValue } from 'jotai'
 import { useMemo, type FC } from 'react'
 
 import { useMachineContext } from '../helpers/useMachineContext'
 import { machineAtomAtom } from '../src/states'
-import { useAtomValue } from 'jotai'
 
 const ItemRoot = styled('div')<{ selected: boolean }>`
   display: flex;

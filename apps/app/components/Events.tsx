@@ -11,8 +11,8 @@ import { useEffect, useMemo, type FC, type ReactNode } from 'react'
 import { useMeasure } from 'react-use'
 
 import { type PulseEvent } from '../src/machine'
-import { machineAtomAtom } from '../src/states'
 import { type Interval } from '../src/reducer'
+import { machineAtomAtom } from '../src/states'
 
 const Root = styled('div')`
   overflow: hidden;

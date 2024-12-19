@@ -15,6 +15,7 @@ import {
 import { atom, useAtom, useSetAtom } from 'jotai'
 import { without } from 'lodash'
 import { useCallback, useEffect, type ChangeEvent, type FC } from 'react'
+
 import { boardCountAtom, openSetupAtom, serialPortAtom } from '../src/states'
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({

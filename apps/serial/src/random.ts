@@ -1,6 +1,6 @@
+import { createReadStream, createWriteStream } from 'fs'
 import { createInterface } from 'readline/promises'
 
-import { createReadStream, createWriteStream } from 'fs'
 ;(async () => {
   const ws = createWriteStream('apps/app/serial/out/random.txt')
   const rs = createReadStream('apps/app/serial/out/pulse.txt')
