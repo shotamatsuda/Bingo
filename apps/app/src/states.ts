@@ -10,8 +10,8 @@ export const machineAtomAtom = atom(get => {
   const receiver = get(receiverAtom)
   return atomWithMachine(() =>
     createMachine({
-      receiver: receiver ?? createNullReceiver(),
-      autoContinue: true
+      receiver: receiver ?? createNullReceiver()
+      // autoContinue: true
     })
   )
 })
