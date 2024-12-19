@@ -19,7 +19,7 @@ import { without } from 'lodash'
 import { useCallback, useEffect, type ChangeEvent, type FC } from 'react'
 
 import { createInternalReceiver, createSerialReceiver } from '../src/receivers'
-import { boardCountAtom, openSetupAtom, receiverAtom } from '../src/states'
+import { boardCountAtom, openSettingsAtom, receiverAtom } from '../src/states'
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   [`.${dialogClasses.paper}`]: {
@@ -65,7 +65,7 @@ const SerialPortItem: FC<{
       <ListItemText>
         <Stack direction='row' spacing={1}>
           <Typography display='inline' fontSize='inherit'>
-            Serial
+            Serial port
           </Typography>
           <Typography display='inline' fontSize='inherit' color='textSecondary'>
             {port.getInfo().usbVendorId} - {port.getInfo().usbProductId}
@@ -109,7 +109,7 @@ const InternalItem: FC<{
   )
 }
 
-export const Setup: FC = () => {
+export const Settings: FC = () => {
   const [ports, setPorts] = useAtom(serialPortsAtom)
 
   useEffect(() => {
@@ -164,7 +164,7 @@ export const Setup: FC = () => {
     [setBoardCount]
   )
 
-  const [open, setOpen] = useAtom(openSetupAtom)
+  const [open, setOpen] = useAtom(openSettingsAtom)
   const handleClose = useCallback(() => {
     setOpen(false)
   }, [setOpen])

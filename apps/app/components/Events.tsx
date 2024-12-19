@@ -1,4 +1,5 @@
-import { css, styled, useTheme } from '@mui/material'
+import { Button, css, styled, Typography, useTheme } from '@mui/material'
+import { Stack } from '@mui/system'
 import { scaleLinear, type ScaleLinear } from 'd3'
 import {
   animate,
@@ -6,18 +7,21 @@ import {
   useAnimationFrame,
   useMotionValue
 } from 'framer-motion'
-import { useAtom, useAtomValue } from 'jotai'
-import { useEffect, useMemo, type FC, type ReactNode } from 'react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useCallback, useEffect, useMemo, type FC, type ReactNode } from 'react'
 import { useMeasure } from 'react-use'
 
 import { type PulseEvent } from '../src/machine'
 import { type Interval } from '../src/reducer'
-import { machineAtomAtom } from '../src/states'
+import { machineAtomAtom, openSettingsAtom, receiverAtom } from '../src/states'
 
 const Root = styled('div')`
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
   border: ${({ theme }) => `solid 1px ${theme.palette.secondary.main}`};
@@ -218,21 +222,39 @@ export const Events: FC<EventsProps> = ({ duration = 5000 }) => {
 
   const events = useEvents({ duration })
   const intervals = useIntervals({ duration })
+
+  const receiver = useAtomValue(receiverAtom)
+  const setOpenSettings = useSetAtom(openSettingsAtom)
+  const handleSetup = useCallback(() => {
+    setOpenSettings(true)
+  }, [setOpenSettings])
+
   return (
     <Root ref={ref}>
-      <Svg>
-        {intervals.map(interval => (
-          <IntervalItem
-            key={interval.a.time}
-            interval={interval}
-            scaleY={scaleY}
-          />
-        ))}
-        {events.map(event => (
-          <EventItem key={event.time} event={event} scaleY={scaleY} />
-        ))}
-      </Svg>
-      <Flash events={events} />
+      {receiver != null ? (
+        <>
+          <Svg>
+            {intervals.map(interval => (
+              <IntervalItem
+                key={interval.a.time}
+                interval={interval}
+                scaleY={scaleY}
+              />
+            ))}
+            {events.map(event => (
+              <EventItem key={event.time} event={event} scaleY={scaleY} />
+            ))}
+          </Svg>
+          <Flash events={events} />
+        </>
+      ) : (
+        <Stack spacing={2}>
+          <Typography variant='h6'>No receiver configured</Typography>
+          <Button variant='contained' size='large' onClick={handleSetup}>
+            Settings
+          </Button>
+        </Stack>
+      )}
     </Root>
   )
 }

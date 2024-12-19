@@ -17,4 +17,4 @@ export const machineAtomAtom = atom(get => {
 })
 
 export const boardCountAtom = atom(40)
-export const openSetupAtom = atom(true)
+export const openSettingsAtom = atom(true)

@@ -7,7 +7,7 @@ import { Flips } from '../components/Flips'
 import { History } from '../components/History'
 import { Probability } from '../components/Probability'
 import { Screen } from '../components/Screen'
-import { Setup } from '../components/Setup'
+import { Settings } from '../components/Settings'
 import { type PageProps } from '../src/types'
 
 const Root = styled('div')`
@@ -63,7 +63,7 @@ const Index: NextPage = () => (
         </Columns>
       </Root>
     </Screen>
-    <Setup />
+    <Settings />
   </>
 )
 
